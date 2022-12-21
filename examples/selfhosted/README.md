@@ -26,8 +26,8 @@ to generate a counter that increases at least once per microsecond.
 
 The benchmark determines the correct number of iterations automatically by
 proportionally increasing the count until a minimum number of seconds (or
-minimum number of iterations) elapse. See `MIN_RUNTIME_SEC` and `MIN_ITER` in
-`main.c`.
+minimum number of iterations) elapse. These requirements are defined in the
+auto-tune macro in `profile/ee_bench.c`.
 
 ## Self-checking
 
@@ -37,14 +37,7 @@ This is to help verify the primitive SDK implementation is was done correctly.
 
 # Compile and run
 
-The `cmake` list file will build one of three options, depending on the following
-variables:
-
-`SELFHOSTED` - Builds a reference mbedTLS executable (mbedTLS source included)
-`WOLFSSL` - Builds a reference wolfSSL executable (wolfSSL must be installed)
-default - Compiles and builds a library with the un-implemented functions
-
-## Default `SELFHOSTED` with `WOLFSSL`
+This example expects the wolfSSL library to be installed on your host.
 
 ```
 % mkdir build
