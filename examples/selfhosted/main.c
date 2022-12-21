@@ -675,8 +675,8 @@ static task_entry_t g_task[] =
     TASK(sha256               ,   23,  3.0f, 0x2151)
     TASK(sha256               ,   57,  1.0f, 0x3b3c)
     TASK(sha256               ,  384,  1.0f, 0x1d3f)
-    TASK(sha256               , 4224,  4.0f, 0x9284)
     TASK(variation_001        ,    0,  3.0f, 0x0000)
+    TASK(sha256               , 4224,  4.0f, 0x9284)
     TASK(aes128_ecb_encrypt   , 2048, 10.0f, 0xc380)
     /* Version 2: */
     /*   Light */
