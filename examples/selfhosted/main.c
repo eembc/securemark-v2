@@ -681,7 +681,7 @@ static task_entry_t g_task[] =
     /* Version 2: */
     /*   Light */
     /*     TLS1.3 */
-    TASK(sha256               ,  102,  1.0f, 0x880c)
+    TASK(sha256               ,  102, 10.0f, 0x880c)
     TASK(sha256               ,   94, 26.0f, 0xd86b)
     TASK(sha256               ,   93,  8.0f, 0x551b)
     TASKEX(sha256             ,        1.0f, 0x5c37, &g_sha_digest_l)
@@ -701,7 +701,7 @@ static task_entry_t g_task[] =
     TASK(nop                  ,    0,  0.0f, 0) /* math placeholder */
     /*   Medium */
     /*     TLS1.3/CCM */
-    TASK(sha256               ,  102,  1.0f, 0x880c)
+    TASK(sha256               ,  102, 10.0f, 0x880c)
     TASK(sha256               ,   94, 26.0f, 0xd86b)
     TASK(sha256               ,   93,  8.0f, 0x551b)
     TASKEX(sha256             ,        3.0f, 0xa23c, &g_sha_digest_m)
