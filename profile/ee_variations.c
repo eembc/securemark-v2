@@ -103,11 +103,13 @@ ee_variation_001(uint32_t iter)
         CHECK(th_aes_create(&p_caes, EE_AES_ECB));
         CHECK(th_aes_init(p_caes, p_key, 16, NULL, EE_AES_ENC, EE_AES_ECB));
         CHECK(th_aes_ecb_encrypt(p_caes, p_pt, 16, p_ct));
+        th_aes_deinit(p_caes);
         th_aes_destroy(p_caes);
 
         CHECK(th_aes_create(&p_caes, EE_AES_ECB));
         CHECK(th_aes_init(p_caes, p_key, 16, NULL, EE_AES_ENC, EE_AES_ECB));
         CHECK(th_aes_ecb_encrypt(p_caes, p_pt, 16, p_ct));
+        th_aes_deinit(p_caes);
         th_aes_destroy(p_caes);
 
         CHECK(th_sha_process(p_csha1, p_buf1, 16));
@@ -118,6 +120,7 @@ ee_variation_001(uint32_t iter)
         CHECK(th_aes_create(&p_caes, EE_AES_ECB));
         CHECK(th_aes_init(p_caes, p_key, 16, NULL, EE_AES_ENC, EE_AES_ECB));
         CHECK(th_aes_ecb_encrypt(p_caes, p_pt, 16, p_ct));
+        th_aes_deinit(p_caes);
         th_aes_destroy(p_caes);
 
         CHECK(th_sha_done(p_csha1, p_digest));
