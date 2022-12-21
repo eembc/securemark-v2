@@ -199,5 +199,6 @@ void ee_bench_verify(ee_dsa_alg_t       alg,
                      ee_bench_result_t *res);
 
 arg_claimed_t ee_bench_parse(char *p_command, bool verify);
+void ee_bench_var01(uint32_t i, ee_bench_result_t *res);
 
 #endif /* __EE_BENCH_H */

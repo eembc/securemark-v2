@@ -574,7 +574,7 @@ ee_bench_var01(uint32_t i, ee_bench_result_t *res)
 {
     uint32_t dt = 0;
     AUTOTUNE(dt = ee_variation_001(i));
-    res->iter = 1;
+    res->iter = i;
     res->dt   = dt;
 }
 
