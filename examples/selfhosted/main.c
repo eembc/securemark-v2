@@ -670,8 +670,8 @@ static task_entry_t g_task[] =
     TASK(aes128_ccm_encrypt   ,   52,  1.0f, 0xd82d)
     TASK(aes128_ccm_decrypt   ,  168,  1.0f, 0x9a42)
     TASK(ecdh_p256r1          ,    0,  1.0f, 0)
-    TASK(ecdsa_sign_p256r1    ,   32,  1.0f, 0)
-    TASK(ecdsa_verify_p256r1  ,   32,  1.0f, 1)
+    TASK(ecdsa_sign_p256r1    ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_p256r1  ,    0,  1.0f, 1)
     TASK(sha256               ,   23,  3.0f, 0x2151)
     TASK(sha256               ,   57,  1.0f, 0x3b3c)
     TASK(sha256               ,  384,  1.0f, 0x1d3f)
@@ -687,8 +687,8 @@ static task_entry_t g_task[] =
     TASKEX(sha256             ,        1.0f, 0x5c37, &g_sha_digest_l)
     TASKEX(chachapoly_encrypt ,        1.0f, 0xb645, &g_aead_e_multi_l)
     TASKEX(chachapoly_decrypt ,        1.0f, 0x7b1a, &g_aead_d_multi_l)
-    TASK(ecdsa_sign_ed25519   ,  130,  1.0f, 0)
-    TASK(ecdsa_verify_ed25519 ,   64,  2.0f, 1)
+    TASK(ecdsa_sign_ed25519   ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_ed25519 ,    0,  2.0f, 1)
     TASK(ecdh_x25519          ,    0,  1.0f, 0)
     TASK(nop                  ,    0,  0.0f, 0) /* sic. DSA SHA placeholder */
     /*     Secure Boot, RSA */
@@ -707,8 +707,8 @@ static task_entry_t g_task[] =
     TASKEX(sha256             ,        3.0f, 0xa23c, &g_sha_digest_m)
     TASKEX(aes128_ccm_encrypt ,        1.0f, 0xb9d9, &g_aead_e_multi_m)
     TASKEX(aes128_ccm_decrypt ,        1.0f, 0x7b96, &g_aead_d_multi_m)
-    TASK(ecdsa_sign_p256r1    ,   32,  1.0f, 0)
-    TASK(ecdsa_verify_p256r1  ,   32,  2.0f, 1)
+    TASK(ecdsa_sign_p256r1    ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_p256r1  ,    0,  2.0f, 1)
     TASK(ecdh_p256r1          ,    0,  1.0f, 0)
     TASK(sha256               ,  152,  8.0f, 0xd3ea)
     /*     TLS1.3/GCM */
@@ -718,18 +718,18 @@ static task_entry_t g_task[] =
     TASKEX(sha256             ,        1.0f, 0xa23c, &g_sha_digest_m)
     TASKEX(aes128_gcm_encrypt ,        1.0f, 0x954b, &g_aead_e_multi_m)
     TASKEX(aes128_gcm_decrypt ,        1.0f, 0x7b96, &g_aead_d_multi_m)
-    TASK(ecdsa_sign_p256r1    ,   32,  1.0f, 0)
-    TASK(ecdsa_verify_p256r1  ,   32,  2.0f, 1)
+    TASK(ecdsa_sign_p256r1    ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_p256r1  ,    0,  2.0f, 1)
     TASK(ecdh_p256r1          ,    0,  1.0f, 0)
     TASK(sha256               ,  152,  8.0f, 0xd3ea)
     /*     Secure Boot, RSA */
     TASK(nop                  ,    0,  0.0f, 0) /* math placeholder */
     TASK(sha256               , 2048, 20.0f, 0x39ec)
-    TASK(rsa_verify_2048      ,   32,  1.0f, 1)
+    TASK(rsa_verify_2048      ,    0,  1.0f, 1)
     /*     Secure Boot, ECC */
     TASK(nop                  ,    0,  0.0f, 0) /* math placeholder */
     TASK(sha256               , 2048, 20.0f, 0x39ec)
-    TASK(ecdsa_verify_p256r1  ,   32,  1.0f, 1)
+    TASK(ecdsa_verify_p256r1  ,    0,  1.0f, 1)
     /*   High */
     /*     TLS1.3/CCM */
     TASK(sha384               ,  182, 10.0f, 0x4505)
@@ -738,8 +738,8 @@ static task_entry_t g_task[] =
     TASKEX(sha384             ,        1.0f, 0xa6b6, &g_sha_digest_h)
     TASKEX(aes256_ccm_encrypt ,        1.0f, 0xf16d, &g_aead_e_multi_h)
     TASKEX(aes256_ccm_decrypt ,        1.0f, 0x56f1, &g_aead_d_multi_h)
-    TASK(ecdsa_sign_p384r1    ,   48,  1.0f, 0)
-    TASK(ecdsa_verify_p384r1  ,   48,  2.0f, 1)
+    TASK(ecdsa_sign_p384r1    ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_p384r1  ,    0,  2.0f, 1)
     TASK(ecdh_p384r1          ,    0,  1.0f, 0)
     TASK(sha384               ,  173,  1.0f, 0x7bf9)
     /*     TLS1.3/GCM */
@@ -749,18 +749,18 @@ static task_entry_t g_task[] =
     TASKEX(sha384             ,        1.0f, 0xa6b6, &g_sha_digest_h)
     TASKEX(aes256_gcm_encrypt ,        1.0f, 0x9f97, &g_aead_e_multi_h)
     TASKEX(aes256_gcm_decrypt ,        1.0f, 0x56f1, &g_aead_d_multi_h)
-    TASK(ecdsa_sign_p384r1    ,   48,  1.0f, 0)
-    TASK(ecdsa_verify_p384r1  ,   48,  2.0f, 1)
+    TASK(ecdsa_sign_p384r1    ,    0,  1.0f, 0)
+    TASK(ecdsa_verify_p384r1  ,    0,  2.0f, 1)
     TASK(ecdh_p384r1          ,    0,  1.0f, 0)
     TASK(sha384               ,  173,  1.0f, 0x7bf9)
     /*     Secure Boot, RSA */
     TASK(aes256_ctr_decrypt   , 2048, 20.0f, 0xd203)
     TASK(sha384               , 2048, 20.0f, 0xff90)
-    TASK(rsa_verify_4096      ,   32,  1.0f, 1)
+    TASK(rsa_verify_4096      ,    0,  1.0f, 1)
     /*     Secure Boot, ECC */
     TASK(aes256_ctr_decrypt   , 2048, 20.0f, 0xd203)
     TASK(sha384               , 2048, 20.0f, 0xff90)
-    TASK(ecdsa_verify_p384r1  ,   32,  1.0f, 1)
+    TASK(ecdsa_verify_p384r1  ,    0,  1.0f, 1)
 };
 static const size_t g_numtasks = sizeof(g_task) / sizeof(task_entry_t);
 /* This is how we scale the final score for each group*/
@@ -771,18 +771,18 @@ static struct scalar_tuples
     unsigned int scalar;
     float        score;
 } g_scalars[] = {
-    { "TLSv1.2",                  14, 1000, 0.0f },
-    { "TLSv1.3_Light",           10,   10, 0.0f },
-    { "Boot_Light",        3,    1, 0.0f },
-    { "",                          3,    0, 0.0f },
-    { "TLSv1.3_Med_CCM",       10,   10, 0.0f },
-    { "TLSv1.3_Med_GCM",       10,   10, 0.0f },
+    { "TLSv1.2",           14, 1000, 0.0f },
+    { "TLSv1.3_Light",     10,   10, 0.0f },
+    { "Boot_Light",         3,    1, 0.0f },
+    { "",                   3,    0, 0.0f },
+    { "TLSv1.3_Med_CCM",   10,   10, 0.0f },
+    { "TLSv1.3_Med_GCM",   10,   10, 0.0f },
     { "Boot_Med_RSA",       3,    1, 0.0f },
-    { "Boot_Med_ECC",      3,    1, 0.0f },
+    { "Boot_Med_ECC",       3,    1, 0.0f },
     { "TLSv1.3_Heavy_CCM", 10,   10, 0.0f },
-    { "TLSv1.3_Heavy_GCM",      10,   10, 0.0f },
-    { "Boot_Heavy_RSA",   3,    1, 0.0f },
-    { "Boot_Heavy_ECC",   3,    1, 0.0f },
+    { "TLSv1.3_Heavy_GCM", 10,   10, 0.0f },
+    { "Boot_Heavy_RSA",     3,    1, 0.0f },
+    { "Boot_Heavy_ECC",     3,    1, 0.0f },
     { NULL, 0, 0, 0.0f } /* Done */
 };
 // clang-format on
@@ -877,10 +877,10 @@ main(void)
                     g_task[i].expected_crc,
                     g_task[i].actual_crc);
             }
-#if DEBUG_VERIFY == 0 && CRC_ONLY == 0
             printf("\n");
-#endif
+#if DEBUG_VERIFY == 0
         }
+#endif
     }
 #if DEBUG_VERIFY == 0 && CRC_ONLY == 0
     printf("\nComputing suite scores...\n\n");

@@ -14,6 +14,8 @@
 #include <wolfssl/options.h>
 #include <wolfssl/wolfcrypt/asn.h>
 #include <wolfssl/wolfcrypt/rsa.h>
+#include <wolfssl/wolfcrypt/error-crypt.h>
+#include <wolfssl/wolfcrypt/signature.h>
 
 /* can be set for static memory use */
 #define HEAP_HINT NULL
@@ -98,32 +100,32 @@ th_rsa_verify(void    *p_context,
               bool    *p_pass)
 {
     rsa_context_t *ctx      = (rsa_context_t *)p_context;
-    ee_status_t    status   = EE_STATUS_ERROR;
     int            ret      = 0;
-    uint32_t       diglen   = msglen;
-    uint8_t       *p_digest = NULL;
 
     *p_pass  = false;
-    p_digest = XMALLOC(msglen, HEAP_HINT, DYNAMIC_TYPE_RSA_BUFFER);
-    if (!p_digest)
+
+    ret = wc_SignatureVerify(
+        WC_HASH_TYPE_SHA256,
+        WC_SIGNATURE_TYPE_RSA_W_ENC,
+        p_msg,
+        msglen,
+        p_sig,
+        siglen,
+        ctx->pubkey,
+        sizeof(RsaKey));
+
+    if (ret != 0 && ret != SIG_VERIFY_E)
     {
-        th_printf("e-[th_rsa_verify: XMALLOC failed]\r\n");
+        th_printf("e-[wc_SignatureVerify: %d]\r\n", ret);
         return EE_STATUS_ERROR;
     }
-    ret = wc_RsaSSL_Verify(p_sig, siglen, p_digest, diglen, ctx->pubkey);
-    if (ret < 0)
-    {
-        th_printf("e-[wc_RsaSSL_Verify: %d]\r\n", ret);
-        goto exit;
-    }
-    if (!XMEMCMP(p_msg, p_digest, msglen) && ret == msglen)
+
+    if (ret == 0)
     {
         *p_pass = true;
     }
-    status = EE_STATUS_OK;
-exit:
-    XFREE(p_digest, HEAP_HINT, DYNAMIC_TYPE_RSA_BUFFER);
-    return status;
+
+    return EE_STATUS_OK;
 }
 
 void
