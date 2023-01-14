@@ -105,17 +105,15 @@ th_ecdsa_sign(void     *p_context,
     {
         case ECC_SECP256R1:
         case ECC_SECP384R1:
-            CHK1(wc_SignatureGenerate(
-                WC_HASH_TYPE_SHA256,
-                WC_SIGNATURE_TYPE_ECC,
-                p_msg,
-                msglen,
-                p_sig,
-                p_siglen,
-                &(c->key.ecc),
-                sizeof(ecc_key),
-                &(c->rng)
-            ));
+            CHK1(wc_SignatureGenerateHash(WC_HASH_TYPE_SHA256,
+                                          WC_SIGNATURE_TYPE_ECC,
+                                          p_msg,
+                                          msglen,
+                                          p_sig,
+                                          p_siglen,
+                                          &(c->key.ecc),
+                                          sizeof(ecc_key),
+                                          &(c->rng)));
             break;
         case ECC_X25519:
             CHK1(wc_ed25519_sign_msg(
@@ -148,19 +146,17 @@ th_ecdsa_verify(void    *p_context,
     {
         case ECC_SECP256R1:
         case ECC_SECP384R1:
-            ret = wc_SignatureVerify(
-                WC_HASH_TYPE_SHA256,
-                WC_SIGNATURE_TYPE_ECC,
-                p_msg,
-                msglen,
-                p_sig,
-                siglen,
-                &(c->key.ecc),
-                sizeof(ecc_key)
-            );
+            ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
+                                         WC_SIGNATURE_TYPE_ECC,
+                                         p_msg,
+                                         msglen,
+                                         p_sig,
+                                         siglen,
+                                         &(c->key.ecc),
+                                         sizeof(ecc_key));
             if (ret != 0 && ret != SIG_VERIFY_E)
             {
-                th_printf("e-[wc_SignatureVerify: %d]\r\n", ret);
+                th_printf("e-[wc_SignatureVerifyHash: %d]\r\n", ret);
                 return EE_STATUS_ERROR;
             }
             if (ret == 0)

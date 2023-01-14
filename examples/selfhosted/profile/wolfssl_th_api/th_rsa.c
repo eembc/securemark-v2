@@ -99,24 +99,23 @@ th_rsa_verify(void    *p_context,
               uint32_t siglen,
               bool    *p_pass)
 {
-    rsa_context_t *ctx      = (rsa_context_t *)p_context;
-    int            ret      = 0;
+    rsa_context_t *ctx = (rsa_context_t *)p_context;
+    int            ret = 0;
 
-    *p_pass  = false;
+    *p_pass = false;
 
-    ret = wc_SignatureVerify(
-        WC_HASH_TYPE_SHA256,
-        WC_SIGNATURE_TYPE_RSA_W_ENC,
-        p_msg,
-        msglen,
-        p_sig,
-        siglen,
-        ctx->pubkey,
-        sizeof(RsaKey));
+    ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
+                                 WC_SIGNATURE_TYPE_RSA_W_ENC,
+                                 p_msg,
+                                 msglen,
+                                 p_sig,
+                                 siglen,
+                                 ctx->pubkey,
+                                 sizeof(RsaKey));
 
     if (ret != 0 && ret != SIG_VERIFY_E)
     {
-        th_printf("e-[wc_SignatureVerify: %d]\r\n", ret);
+        th_printf("e-[wc_SignatureVerifyHash: %d]\r\n", ret);
         return EE_STATUS_ERROR;
     }
 
