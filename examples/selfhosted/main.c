@@ -612,7 +612,7 @@ wrap_variation_001(void *ex, uint32_t n, uint32_t i, wres_t *res)
 {
     ee_bench_result_t bres;
     n = 0; /* unused */
-    ee_bench_var01(0, &bres);
+    ee_bench_var01(i, &bres);
     res->iter = bres.iter;
     res->dt   = bres.dt;
     /**
