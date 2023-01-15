@@ -93,8 +93,8 @@ th_rsa_set_public_key(void *p_context, const uint8_t *p_pub, uint32_t publen)
 
 ee_status_t
 th_rsa_verify(void    *p_context,
-              uint8_t *p_msg,
-              uint32_t msglen,
+              uint8_t *p_hash,
+              uint32_t hashlen,
               uint8_t *p_sig,
               uint32_t siglen,
               bool    *p_pass)
@@ -106,8 +106,8 @@ th_rsa_verify(void    *p_context,
 
     ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
                                  WC_SIGNATURE_TYPE_RSA_W_ENC,
-                                 p_msg,
-                                 msglen,
+                                 p_hash,
+                                 hashlen,
                                  p_sig,
                                  siglen,
                                  ctx->pubkey,
