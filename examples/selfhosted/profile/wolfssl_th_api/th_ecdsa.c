@@ -179,9 +179,6 @@ th_ecdsa_verify(void    *p_context,
     }
     *p_pass = verify == 1;
     return EE_STATUS_OK;
-error:
-    th_printf("e-[th_ecdsa_verify: error: %d]\r\n", ret);
-    return EE_STATUS_ERROR;
 }
 
 ee_status_t
