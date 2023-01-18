@@ -46,12 +46,16 @@ ee_status_t th_rsa_set_public_key(void          *p_context,
                                   uint32_t       publen);
 
 /**
- * @brief Verify a message (hash) with the public key. The message will
- * be in ASN.1 format as OID || SHA256(m)
+ * @brief Verify a message (hash) with the public key. The signature will
+ * be in ASN.1 padded OID || SHA256(m).
+ *
+ * It will return EE_STATUS_OK on message verify, and EE_STATUS_ERROR if the
+ * message does not verify, or if there is some other error (which shall
+ * be reported with `th_printf("e-[....]r\n");`.
  *
  * @param p_context - The context from the `create` function
- * @param p_sig - The input message buffer
- * @param msglen - Length of the input message buffer
+ * @param p_hash - The input message buffer
+ * @param hashlen - Length of the input message buffer
  * @param p_sig - The output signature buffer
  * @param siglen - Length of the output signature buffer
  * @param p_pass - Did the message verify?
@@ -59,7 +63,7 @@ ee_status_t th_rsa_set_public_key(void          *p_context,
  */
 ee_status_t th_rsa_verify(void    *p_context,
                           uint8_t *p_msg,
-                          uint32_t msglen,
+                          uint32_t hashlen,
                           uint8_t *p_sig,
                           uint32_t siglen,
                           bool    *p_pass);

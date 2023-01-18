@@ -14,6 +14,8 @@
 #include <wolfssl/options.h>
 #include <wolfssl/wolfcrypt/asn.h>
 #include <wolfssl/wolfcrypt/rsa.h>
+#include <wolfssl/wolfcrypt/error-crypt.h>
+#include <wolfssl/wolfcrypt/signature.h>
 
 /* can be set for static memory use */
 #define HEAP_HINT NULL
@@ -91,39 +93,56 @@ th_rsa_set_public_key(void *p_context, const uint8_t *p_pub, uint32_t publen)
 
 ee_status_t
 th_rsa_verify(void    *p_context,
-              uint8_t *p_msg,
-              uint32_t msglen,
+              uint8_t *p_hash,
+              uint32_t hashlen,
               uint8_t *p_sig,
               uint32_t siglen,
               bool    *p_pass)
 {
-    rsa_context_t *ctx      = (rsa_context_t *)p_context;
-    ee_status_t    status   = EE_STATUS_ERROR;
-    int            ret      = 0;
-    uint32_t       diglen   = msglen;
-    uint8_t       *p_digest = NULL;
+    rsa_context_t *ctx = (rsa_context_t *)p_context;
+    int            ret = 0;
+    uint8_t        encoded_hash[100]; /* should be around 50 bytes */
+    uint32_t       encoded_size;
 
-    *p_pass  = false;
-    p_digest = XMALLOC(msglen, HEAP_HINT, DYNAMIC_TYPE_RSA_BUFFER);
-    if (!p_digest)
-    {
-        th_printf("e-[th_rsa_verify: XMALLOC failed]\r\n");
-        return EE_STATUS_ERROR;
-    }
-    ret = wc_RsaSSL_Verify(p_sig, siglen, p_digest, diglen, ctx->pubkey);
+    *p_pass = false;
+
+    /* Add ASN digest info header */
+    ret = wc_EncodeSignature(
+        encoded_hash,
+        p_hash,
+        hashlen,
+        SHA256h
+    );
+
     if (ret < 0)
     {
-        th_printf("e-[wc_RsaSSL_Verify: %d]\r\n", ret);
-        goto exit;
+        th_printf("e-[wc_EncodeSignature: %d]\r\n", ret);
+        return EE_STATUS_ERROR;
     }
-    if (!XMEMCMP(p_msg, p_digest, msglen) && ret == msglen)
+
+    encoded_size = (uint32_t)ret;
+
+    ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
+                                 WC_SIGNATURE_TYPE_RSA_W_ENC,
+                                 encoded_hash,
+                                 encoded_size,
+                                 p_sig,
+                                 siglen,
+                                 ctx->pubkey,
+                                 sizeof(RsaKey));
+
+    if (ret != 0 && ret != SIG_VERIFY_E)
+    {
+        th_printf("e-[wc_SignatureVerifyHash: %d]\r\n", ret);
+        return EE_STATUS_ERROR;
+    }
+
+    if (ret == 0)
     {
         *p_pass = true;
     }
-    status = EE_STATUS_OK;
-exit:
-    XFREE(p_digest, HEAP_HINT, DYNAMIC_TYPE_RSA_BUFFER);
-    return status;
+
+    return EE_STATUS_OK;
 }
 
 void

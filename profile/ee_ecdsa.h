@@ -42,37 +42,44 @@ ee_status_t th_ecdsa_create(void **pp_context, ee_ecc_group_t group);
  * contain the length of the signature.
  *
  * @param p_context - The context from the `create` function
- * @param p_msg - The hashed buffer to sign
- * @param msglen - Length of the hashed buffer
+ * @param p_hash - The hashed buffer to sign
+ * @param hashlen - Length of the hashed buffer
  * @param p_sig - The output signature buffer (provided)
  * @param p_siglen - The number of bytes used in the output signature buffer.
  * @return ee_status_t - EE_STATUS_OK or EE_STATUS_ERROR
  */
 ee_status_t th_ecdsa_sign(void     *p_context,
-                          uint8_t  *p_msg,
-                          uint32_t  msglen,
+                          uint8_t  *p_hash,
+                          uint32_t  hashlen,
                           uint8_t  *p_sig,
                           uint32_t *p_siglen);
 
 /**
  * @brief Verify a message (hash) with the public key.
+ * 
+ * For EcDSA, the signature format is the ASN.1 DER of R and S. For Ed25519,
+ * the signature is the raw, little endian encoding of R and S, padded to 256
+ * bits.
  *
+ * Note that even if the message is a hash, Ed25519 will perform another SHA-
+ * 512 operation on it, as this is part of RFC 8032.
+ * 
  * It will return EE_STATUS_OK on message verify, and EE_STATUS_ERROR if the
  * message does not verify, or if there is some other error (which shall
  * be reported with `th_printf("e-[....]r\n");`.
  *
  * @param p_context - The context from the `create` function
  * @param group - See the `ee_ecc_group_t` enum
- * @param p_msg - The message buffer to verify
- * @param msglen - Length of the message buffer
+ * @param p_hash - The message buffer to verify
+ * @param hashlen - Length of the message buffer
  * @param p_sig - The input signature buffer
  * @param siglen - Length of the input signature buffer
  * @param p_pass - Did the message verify?
  * @return ee_status_t - see above.
  */
 ee_status_t th_ecdsa_verify(void    *p_context,
-                            uint8_t *p_msg,
-                            uint32_t msglen,
+                            uint8_t *p_hash,
+                            uint32_t hashlen,
                             uint8_t *p_sig,
                             uint32_t siglen,
                             bool    *p_pass);

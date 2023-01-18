@@ -28,8 +28,8 @@ th_ecdsa_get_public_key(void *p_context, uint8_t *p_out, uint32_t *p_outlen)
 
 ee_status_t
 th_ecdsa_verify(void    *p_context,
-                uint8_t *p_msg,
-                uint32_t msglen,
+                uint8_t *p_hash,
+                uint32_t hashlen,
                 uint8_t *p_sig,
                 uint32_t siglen,
                 bool    *p_pass)
@@ -40,8 +40,8 @@ th_ecdsa_verify(void    *p_context,
 
 ee_status_t
 th_ecdsa_sign(void     *p_context,
-              uint8_t  *p_msg,
-              uint32_t  msglen,
+              uint8_t  *p_hash,
+              uint32_t  hashlen,
               uint8_t  *p_sig,
               uint32_t *p_siglen)
 {

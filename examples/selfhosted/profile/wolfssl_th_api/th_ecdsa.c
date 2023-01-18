@@ -15,6 +15,7 @@
 #include <wolfssl/wolfcrypt/ecc.h>
 #include <wolfssl/wolfcrypt/ed25519.h>
 #include <wolfssl/wolfcrypt/error-crypt.h>
+#include <wolfssl/wolfcrypt/signature.h>
 
 /* can be set for static memory use */
 #define HEAP_HINT NULL
@@ -92,8 +93,8 @@ error:
 
 ee_status_t
 th_ecdsa_sign(void     *p_context,
-              uint8_t  *p_msg,
-              uint32_t  msglen,
+              uint8_t  *p_hash,
+              uint32_t  hashlen,
               uint8_t  *p_sig,
               uint32_t *p_siglen)
 {
@@ -104,12 +105,19 @@ th_ecdsa_sign(void     *p_context,
     {
         case ECC_SECP256R1:
         case ECC_SECP384R1:
-            CHK1(wc_ecc_sign_hash(
-                p_msg, msglen, p_sig, p_siglen, &(c->rng), &(c->key.ecc)));
+            CHK1(wc_SignatureGenerateHash(WC_HASH_TYPE_SHA256,
+                                          WC_SIGNATURE_TYPE_ECC,
+                                          p_hash,
+                                          hashlen,
+                                          p_sig,
+                                          p_siglen,
+                                          &(c->key.ecc),
+                                          sizeof(ecc_key),
+                                          &(c->rng)));
             break;
         case ECC_X25519:
             CHK1(wc_ed25519_sign_msg(
-                p_msg, msglen, p_sig, p_siglen, &(c->key.ed25519)));
+                p_hash, hashlen, p_sig, p_siglen, &(c->key.ed25519)));
             break;
         default:
             th_printf("e-[th_ecdsa_sign: invalid curve %d]\r\n", c->curve);
@@ -123,8 +131,8 @@ error:
 
 ee_status_t
 th_ecdsa_verify(void    *p_context,
-                uint8_t *p_msg,
-                uint32_t msglen,
+                uint8_t *p_hash,
+                uint32_t hashlen,
                 uint8_t *p_sig,
                 uint32_t siglen,
                 bool    *p_pass)
@@ -138,12 +146,27 @@ th_ecdsa_verify(void    *p_context,
     {
         case ECC_SECP256R1:
         case ECC_SECP384R1:
-            CHK1(wc_ecc_verify_hash(
-                p_sig, siglen, p_msg, msglen, &verify, &(c->key.ecc)));
+            ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
+                                         WC_SIGNATURE_TYPE_ECC,
+                                         p_hash,
+                                         hashlen,
+                                         p_sig,
+                                         siglen,
+                                         &(c->key.ecc),
+                                         sizeof(ecc_key));
+            if (ret != 0 && ret != SIG_VERIFY_E)
+            {
+                th_printf("e-[wc_SignatureVerifyHash: %d]\r\n", ret);
+                return EE_STATUS_ERROR;
+            }
+            if (ret == 0)
+            {
+                verify = 1;
+            }
             break;
         case ECC_X25519:
             ret = wc_ed25519_verify_msg(
-                p_sig, siglen, p_msg, msglen, &verify, &(c->key.ed25519));
+                p_sig, siglen, p_hash, hashlen, &verify, &(c->key.ed25519));
             if (ret != 0 && ret != SIG_VERIFY_E)
             {
                 th_printf("e-[wc_ed25519_verify_msg: %d]\r\n", ret);
@@ -156,9 +179,6 @@ th_ecdsa_verify(void    *p_context,
     }
     *p_pass = verify == 1;
     return EE_STATUS_OK;
-error:
-    th_printf("e-[th_ecdsa_verify: error: %d]\r\n", ret);
-    return EE_STATUS_ERROR;
 }
 
 ee_status_t
