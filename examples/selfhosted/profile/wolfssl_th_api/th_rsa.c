@@ -101,13 +101,31 @@ th_rsa_verify(void    *p_context,
 {
     rsa_context_t *ctx = (rsa_context_t *)p_context;
     int            ret = 0;
+    uint8_t        encoded_hash[100]; /* should be around 50 bytes */
+    uint32_t       encoded_size;
 
     *p_pass = false;
 
+    /* Add ASN digest info header */
+    ret = wc_EncodeSignature(
+        encoded_hash,
+        p_hash,
+        hashlen,
+        SHA256h
+    );
+
+    if (ret < 0)
+    {
+        th_printf("e-[wc_EncodeSignature: %d]\r\n", ret);
+        return EE_STATUS_ERROR;
+    }
+
+    encoded_size = (uint32_t)ret;
+
     ret = wc_SignatureVerifyHash(WC_HASH_TYPE_SHA256,
                                  WC_SIGNATURE_TYPE_RSA_W_ENC,
-                                 p_hash,
-                                 hashlen,
+                                 encoded_hash,
+                                 encoded_size,
                                  p_sig,
                                  siglen,
                                  ctx->pubkey,
